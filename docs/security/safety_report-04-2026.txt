@@ -1,0 +1,126 @@
+
+
+[33m[1m+===========================================================================================================================================================================================+[0m
+
+
+[31m[1mDEPRECATED: [0m[33m[1mthis command (`check`) has been DEPRECATED, and will be unsupported beyond 01 June 2024.[0m
+
+
+[32mWe highly encourage switching to the new [0m[32m[1m`scan`[0m[32m command which is easier to use, more powerful, and can be set up to mimic the deprecated command if required.[0m
+
+
+[33m[1m+===========================================================================================================================================================================================+[0m
+
+
++==============================================================================+
+
+                               /$$$$$$            /$$
+                              /$$__  $$          | $$
+           /$$$$$$$  /$$$$$$ | $$  \__//$$$$$$  /$$$$$$   /$$   /$$
+          /$$_____/ |____  $$| $$$$   /$$__  $$|_  $$_/  | $$  | $$
+         |  $$$$$$   /$$$$$$$| $$_/  | $$$$$$$$  | $$    | $$  | $$
+          \____  $$ /$$__  $$| $$    | $$_____/  | $$ /$$| $$  | $$
+          /$$$$$$$/|  $$$$$$$| $$    |  $$$$$$$  |  $$$$/|  $$$$$$$
+         |_______/  \_______/|__/     \_______/   \___/   \____  $$
+                                                          /$$  | $$
+                                                         |  $$$$$$/
+  by safetycli.com                                        \______/
+
++==============================================================================+
+
+ [1mREPORT[0m 
+
+  Safety [1mv3.7.0[0m is scanning for [1mVulnerabilities[0m[1m...[0m
+[1m  Scanning dependencies[0m in your [1menvironment:[0m
+
+  -> /home/caiogbrayner/Desktop/BlogFastAPI/.venv/lib/python3.12/site-packages
+
+  Using [1mthe account caiogomesbrayner@outlook.com[0m and the [1mSafety
+  Commercial database[0m
+[1m  Found and scanned 69 packages[0m
+  Timestamp [1m2026-04-03 08:01:29[0m
+[1m  2[0m[1m vulnerabilities reported[0m
+[1m  0[0m[1m vulnerabilities ignored[0m
+[1m  1[0m[1m remediation recommended[0m
+
++==============================================================================+
+ [1mVULNERABILITIES REPORTED[0m 
++==============================================================================+
+
+[31m-> Vulnerability found in ecdsa version 0.19.2[0m
+[1m   Vulnerability ID: [0m64396
+[1m   Affected spec: [0m>=0
+[1m   ADVISORY: [0mEcdsa does not protects against side-channel attacks.
+   This is because Python does not provide side-channel secure primitives
+   (with the exception of hmac.compare_digest()), making side-channel secure
+   programming impossible. For a sophisticated attacker observing just one
+   operation with a private key will be sufficient to completely reconstruct
+   the private key.https://pypi.org/project/ecdsa/#Security
+[1m   Fixed versions: [0mNo known fix
+[1m   PVE-2024-64396[0m
+[1m   For more information about this vulnerability, visit
+   [0mhttps://data.safetycli.com/v/64396/eda[0m
+   To ignore this vulnerability, use PyUp vulnerability id 64396 in safety’s
+   ignore command-line argument or add the ignore to your safety policy file.
+
+
+[31m-> Vulnerability found in ecdsa version 0.19.2[0m
+[1m   Vulnerability ID: [0m64459
+[1m   Affected spec: [0m>=0
+[1m   ADVISORY: [0mThe python-ecdsa library, which implements ECDSA
+   cryptography in Python, is vulnerable to the Minerva attack
+   (CVE-2024-23342). This vulnerability arises because scalar multiplication
+   is not performed in constant time, affecting ECDSA signatures, key
+   generation, and ECDH operations. ECDSA signature verification remains
+   unaffected. The project maintainers have stated that there is no plan to
+   release a fix for this vulnerability, citing their security policy:"As
+   stated in the security policy, side-channel vulnerabilities are outside
+   the scope of the project. This is not due to a lack of interest in side-
+   channel secure implementations but rather because the main goal of the
+   project is to be pure Python. Implementing side-channel-free code in pure
+   Python is impossible. Therefore, we do not plan to release a fix for this
+   vulnerability."NOTE: The specs we include in this advisory differ from the
+   publicly available on other sources. That's because research by Safety CLI
+   Cybersecurity Team confirms that there is no plan to address this
+   vulnerability.
+[1m   Fixed versions: [0mNo known fix
+[1m   CVE-2024-23342 is [0m[31m[1mHIGH SEVERITY => [0mCVSS v3, BASE
+   SCORE 7.4, IMPACT SCORE 5.2, VECTOR STRING
+   CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N
+[1m   For more information about this vulnerability, visit
+   [0mhttps://data.safetycli.com/v/64459/eda[0m
+   To ignore this vulnerability, use PyUp vulnerability id 64459 in safety’s
+   ignore command-line argument or add the ignore to your safety policy file.
+
+
++==============================================================================+
+   [32m[1mREMEDIATIONS[0m
+
+[31m[1m-> ecdsa version 0.19.2 was found, which has 2 vulnerabilities[0m
+                                                                              
+   [33m[1mThere is no known fix for these vulnerabilities.[0m [32m[1m[0m
+                                                                              
+   For more information about the ecdsa package and update options, visit
+   https://data.safetycli.com/p/pypi/ecdsa/eda/?from=0.19.2
+   Always check for breaking changes when updating packages.
+                                                                              
++==============================================================================+
+
+ Scan was completed. 2 vulnerabilities were reported. 1 remediation was 
+ recommended. 
+
++==============================================================================+[0m
+
+
+[33m[1m+===========================================================================================================================================================================================+[0m
+
+
+[31m[1mDEPRECATED: [0m[33m[1mthis command (`check`) has been DEPRECATED, and will be unsupported beyond 01 June 2024.[0m
+
+
+[32mWe highly encourage switching to the new [0m[32m[1m`scan`[0m[32m command which is easier to use, more powerful, and can be set up to mimic the deprecated command if required.[0m
+
+
+[33m[1m+===========================================================================================================================================================================================+[0m
+
+

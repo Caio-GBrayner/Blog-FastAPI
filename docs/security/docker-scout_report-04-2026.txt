@@ -1,0 +1,359 @@
+
+
+## Overview
+
+                   │                                       Analyzed Image                                       
+───────────────────┼────────────────────────────────────────────────────────────────────────────────────────────
+ Target            │  python:3.12-slim                                                                          
+   digest          │  0bbd3d5f3abb                                                                              
+   platform        │ linux/amd64                                                                                
+   provenance      │ https://github.com/docker-library/python.git                                               
+                   │  https://github.com/docker-library/python/blob/3362634339580d3232e65a66dd5a36c47ae7ff14                                                  
+   vulnerabilities │    0C     0H     3M    23L     1?                                                          
+   size            │ 43 MB                                                                                      
+   packages        │ 124                                                                                        
+                   │                                                                                            
+ Base image        │  oisupport/staging-amd64:55a7fd9dfa36f19df4627d2fa3398ba8445e4eab00f48426e63c14c1275f4315  
+                   │  edc9450a9fe3                                                                              
+
+
+## Packages and Vulnerabilities
+
+   0C     0H     1M     4L  systemd 257.9-1~deb13u1
+pkg:deb/debian/systemd@257.9-1~deb13u1?os_distro=trixie&os_name=debian&os_version=13
+
+https://github.com/docker-library/python/blob/3362634339580d3232e65a66dd5a36c47ae7ff14/3.12/slim-trixie/Dockerfile#L0-L0
+
+
+    ✗ MEDIUM CVE-2026-29111
+      https://scout.docker.com/v/CVE-2026-29111?s=debian&n=systemd&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D257.9-1%7Edeb13u1
+      Affected range : <=257.9-1~deb13u1 
+      Fixed version  : not fixed         
+    
+    ✗ LOW CVE-2023-31439
+      https://scout.docker.com/v/CVE-2023-31439?s=debian&n=systemd&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D257.9-1%7Edeb13u1
+      Affected range : <=257.9-1~deb13u1 
+      Fixed version  : not fixed         
+    
+    ✗ LOW CVE-2023-31438
+      https://scout.docker.com/v/CVE-2023-31438?s=debian&n=systemd&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D257.9-1%7Edeb13u1
+      Affected range : <=257.9-1~deb13u1 
+      Fixed version  : not fixed         
+    
+    ✗ LOW CVE-2023-31437
+      https://scout.docker.com/v/CVE-2023-31437?s=debian&n=systemd&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D257.9-1%7Edeb13u1
+      Affected range : <=257.9-1~deb13u1 
+      Fixed version  : not fixed         
+    
+    ✗ LOW CVE-2013-4392
+      https://scout.docker.com/v/CVE-2013-4392?s=debian&n=systemd&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D257.9-1%7Edeb13u1
+      Affected range : <=257.9-1~deb13u1 
+      Fixed version  : not fixed         
+    
+
+   0C     0H     1M     1L  pip 25.0.1
+pkg:pypi/pip@25.0.1
+
+https://github.com/docker-library/python/blob/3362634339580d3232e65a66dd5a36c47ae7ff14/3.12/slim-trixie/Dockerfile#L31-L145
+RUN set -eux; \
+	\
+	savedAptMark="$(apt-mark showmanual)"; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		dpkg-dev \
+		gcc \
+		gnupg \
+		libbluetooth-dev \
+		libbz2-dev \
+		libc6-dev \
+		libdb-dev \
+		libffi-dev \
+		libgdbm-dev \
+		liblzma-dev \
+		libncursesw5-dev \
+		libreadline-dev \
+		libsqlite3-dev \
+		libssl-dev \
+		make \
+		tk-dev \
+		uuid-dev \
+		wget \
+		xz-utils \
+		zlib1g-dev \
+	; \
+	\
+	wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz"; \
+	echo "$PYTHON_SHA256 *python.tar.xz" | sha256sum -c -; \
+	wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc"; \
+	GNUPGHOME="$(mktemp -d)"; export GNUPGHOME; \
+	gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys "$GPG_KEY"; \
+	gpg --batch --verify python.tar.xz.asc python.tar.xz; \
+	gpgconf --kill all; \
+	rm -rf "$GNUPGHOME" python.tar.xz.asc; \
+	mkdir -p /usr/src/python; \
+	tar --extract --directory /usr/src/python --strip-components=1 --file python.tar.xz; \
+	rm python.tar.xz; \
+	\
+	cd /usr/src/python; \
+	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
+	./configure \
+		--build="$gnuArch" \
+		--enable-loadable-sqlite-extensions \
+		--enable-optimizations \
+		--enable-option-checking=fatal \
+		--enable-shared \
+		$(test "${gnuArch%%-*}" != 'riscv64' && echo '--with-lto') \
+		--with-ensurepip \
+	; \
+	nproc="$(nproc)"; \
+	EXTRA_CFLAGS="$(dpkg-buildflags --get CFLAGS)"; \
+	LDFLAGS="$(dpkg-buildflags --get LDFLAGS)"; \
+	LDFLAGS="${LDFLAGS:-} -Wl,--strip-all"; \
+	arch="$(dpkg --print-architecture)"; arch="${arch##*-}"; \
+# https://docs.python.org/3.12/howto/perf_profiling.html
+# https://github.com/docker-library/python/pull/1000#issuecomment-2597021615
+	case "$arch" in \
+		amd64|arm64) \
+			# only add "-mno-omit-leaf" on arches that support it
+			# https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/x86-Options.html#index-momit-leaf-frame-pointer-2
+			# https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/AArch64-Options.html#index-momit-leaf-frame-pointer
+			EXTRA_CFLAGS="${EXTRA_CFLAGS:-} -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"; \
+			;; \
+		i386) \
+			# don't enable frame-pointers on 32bit x86 due to performance drop.
+			;; \
+		*) \
+			# other arches don't support "-mno-omit-leaf"
+			EXTRA_CFLAGS="${EXTRA_CFLAGS:-} -fno-omit-frame-pointer"; \
+			;; \
+	esac; \
+	make -j "$nproc" \
+		"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}" \
+		"LDFLAGS=${LDFLAGS:-}" \
+	; \
+# https://github.com/docker-library/python/issues/784
+# prevent accidental usage of a system installed libpython of the same version
+	rm python; \
+	make -j "$nproc" \
+		"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}" \
+		"LDFLAGS=${LDFLAGS:-} -Wl,-rpath='\$\$ORIGIN/../lib'" \
+		python \
+	; \
+	make install; \
+	\
+	cd /; \
+	rm -rf /usr/src/python; \
+	\
+	find /usr/local -depth \
+		\( \
+			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
+			-o \( -type f -a \( -name '*.pyc' -o -name '*.pyo' -o -name 'libpython*.a' \) \) \
+		\) -exec rm -rf '{}' + \
+	; \
+	\
+	ldconfig; \
+	\
+	apt-mark auto '.*' > /dev/null; \
+	apt-mark manual $savedAptMark; \
+	find /usr/local -type f -executable -not \( -name '*tkinter*' \) -exec ldd '{}' ';' \
+		| awk '/=>/ { so = $(NF-1); if (index(so, "/usr/local/") == 1) { next }; gsub("^/(usr/)?", "", so); printf "*%s\n", so }' \
+		| sort -u \
+		| xargs -rt dpkg-query --search \
+# https://manpages.debian.org/bookworm/dpkg/dpkg-query.1.en.html#S (we ignore diversions and it'll be really unusual for more than one package to provide any given .so file)
+		| awk 'sub(":$", "", $1) { print $1 }' \
+		| sort -u \
+		| xargs -r apt-mark manual \
+	; \
+	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	apt-get dist-clean; \
+	\
+	export PYTHONDONTWRITEBYTECODE=1; \
+	python3 --version; \
+	pip3 --version
+
+    ✗ MEDIUM CVE-2025-8869 [Improper Link Resolution Before File Access ('Link Following')]
+      https://scout.docker.com/v/CVE-2025-8869?s=github&n=pip&t=pypi&vr=%3C%3D25.2
+      Affected range : <=25.2                                                          
+      Fixed version  : 25.3                                                            
+      CVSS Score     : 5.9                                                             
+      CVSS Vector    : CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:A/VC:N/VI:H/VA:N/SC:N/SI:N/SA:N 
+    
+    ✗ LOW CVE-2026-1703 [Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')]
+      https://scout.docker.com/v/CVE-2026-1703?s=github&n=pip&t=pypi&vr=%3C26.0
+      Affected range : <26.0                                                           
+      Fixed version  : 26.0                                                            
+      CVSS Score     : 2.0                                                             
+      CVSS Vector    : CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:A/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N 
+    
+
+   0C     0H     1M     1L  tar 1.35+dfsg-3.1
+pkg:deb/debian/tar@1.35%2Bdfsg-3.1?os_distro=trixie&os_name=debian&os_version=13
+
+https://github.com/docker-library/python/blob/3362634339580d3232e65a66dd5a36c47ae7ff14/3.12/slim-trixie/Dockerfile#L0-L0
+
+
+    ✗ MEDIUM CVE-2025-45582
+      https://scout.docker.com/v/CVE-2025-45582?s=debian&n=tar&ns=debian&t=deb&osn=debian&osv=13&vr=%3E%3D1.35%2Bdfsg-3.1
+      Affected range : >=1.35+dfsg-3.1 
+      Fixed version  : not fixed       
+    
+    ✗ LOW CVE-2005-2541
+      https://scout.docker.com/v/CVE-2005-2541?s=debian&n=tar&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D1.35%2Bdfsg-3.1
+      Affected range : <=1.35+dfsg-3.1 
+      Fixed version  : not fixed       
+    
+
+   0C     0H     0M     7L  glibc 2.41-12+deb13u2
+pkg:deb/debian/glibc@2.41-12%2Bdeb13u2?os_distro=trixie&os_name=debian&os_version=13
+
+https://github.com/docker-library/python/blob/3362634339580d3232e65a66dd5a36c47ae7ff14/3.12/slim-trixie/Dockerfile#L0-L0
+
+
+    ✗ LOW CVE-2019-9192
+      https://scout.docker.com/v/CVE-2019-9192?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D2.41-12%2Bdeb13u2
+      Affected range : <=2.41-12+deb13u2 
+      Fixed version  : not fixed         
+    
+    ✗ LOW CVE-2019-1010025
+      https://scout.docker.com/v/CVE-2019-1010025?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D2.41-12%2Bdeb13u2
+      Affected range : <=2.41-12+deb13u2 
+      Fixed version  : not fixed         
+    
+    ✗ LOW CVE-2019-1010024
+      https://scout.docker.com/v/CVE-2019-1010024?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D2.41-12%2Bdeb13u2
+      Affected range : <=2.41-12+deb13u2 
+      Fixed version  : not fixed         
+    
+    ✗ LOW CVE-2019-1010023
+      https://scout.docker.com/v/CVE-2019-1010023?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D2.41-12%2Bdeb13u2
+      Affected range : <=2.41-12+deb13u2 
+      Fixed version  : not fixed         
+    
+    ✗ LOW CVE-2019-1010022
+      https://scout.docker.com/v/CVE-2019-1010022?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D2.41-12%2Bdeb13u2
+      Affected range : <=2.41-12+deb13u2 
+      Fixed version  : not fixed         
+    
+    ✗ LOW CVE-2018-20796
+      https://scout.docker.com/v/CVE-2018-20796?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D2.41-12%2Bdeb13u2
+      Affected range : <=2.41-12+deb13u2 
+      Fixed version  : not fixed         
+    
+    ✗ LOW CVE-2010-4756
+      https://scout.docker.com/v/CVE-2010-4756?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D2.41-12%2Bdeb13u2
+      Affected range : <=2.41-12+deb13u2 
+      Fixed version  : not fixed         
+    
+
+   0C     0H     0M     2L     1?  util-linux 2.41-5
+pkg:deb/debian/util-linux@2.41-5?os_distro=trixie&os_name=debian&os_version=13
+
+https://github.com/docker-library/python/blob/3362634339580d3232e65a66dd5a36c47ae7ff14/3.12/slim-trixie/Dockerfile#L0-L0
+
+
+    ✗ LOW CVE-2025-14104
+      https://scout.docker.com/v/CVE-2025-14104?s=debian&n=util-linux&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D2.41-5
+      Affected range : <=2.41-5  
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2022-0563
+      https://scout.docker.com/v/CVE-2022-0563?s=debian&n=util-linux&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D2.41-5
+      Affected range : <=2.41-5  
+      Fixed version  : not fixed 
+    
+    ✗ UNSPECIFIED CVE-2026-27456
+      https://scout.docker.com/v/CVE-2026-27456?s=debian&n=util-linux&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D2.41-5
+      Affected range : <=2.41-5  
+      Fixed version  : not fixed 
+    
+
+   0C     0H     0M     2L  coreutils 9.7-3
+pkg:deb/debian/coreutils@9.7-3?os_distro=trixie&os_name=debian&os_version=13
+
+https://github.com/docker-library/python/blob/3362634339580d3232e65a66dd5a36c47ae7ff14/3.12/slim-trixie/Dockerfile#L0-L0
+
+
+    ✗ LOW CVE-2025-5278
+      https://scout.docker.com/v/CVE-2025-5278?s=debian&n=coreutils&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D9.7-3
+      Affected range : <=9.7-3   
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2017-18018
+      https://scout.docker.com/v/CVE-2017-18018?s=debian&n=coreutils&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D9.7-3
+      Affected range : <=9.7-3   
+      Fixed version  : not fixed 
+    
+
+   0C     0H     0M     2L  sqlite3 3.46.1-7+deb13u1
+pkg:deb/debian/sqlite3@3.46.1-7%2Bdeb13u1?os_distro=trixie&os_name=debian&os_version=13
+
+https://github.com/docker-library/python/blob/3362634339580d3232e65a66dd5a36c47ae7ff14/3.12/slim-trixie/Dockerfile#L0-L0
+
+
+    ✗ LOW CVE-2025-70873
+      https://scout.docker.com/v/CVE-2025-70873?s=debian&n=sqlite3&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D3.46.1-7%2Bdeb13u1
+      Affected range : <=3.46.1-7+deb13u1 
+      Fixed version  : not fixed          
+    
+    ✗ LOW CVE-2021-45346
+      https://scout.docker.com/v/CVE-2021-45346?s=debian&n=sqlite3&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D3.46.1-7%2Bdeb13u1
+      Affected range : <=3.46.1-7+deb13u1 
+      Fixed version  : not fixed          
+    
+
+   0C     0H     0M     1L  perl 5.40.1-6
+pkg:deb/debian/perl@5.40.1-6?os_distro=trixie&os_name=debian&os_version=13
+
+https://github.com/docker-library/python/blob/3362634339580d3232e65a66dd5a36c47ae7ff14/3.12/slim-trixie/Dockerfile#L0-L0
+
+
+    ✗ LOW CVE-2011-4116
+      https://scout.docker.com/v/CVE-2011-4116?s=debian&n=perl&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D5.40.1-6
+      Affected range : <=5.40.1-6 
+      Fixed version  : not fixed  
+    
+
+   0C     0H     0M     1L  openssl 3.5.5-1~deb13u1
+pkg:deb/debian/openssl@3.5.5-1~deb13u1?os_distro=trixie&os_name=debian&os_version=13
+
+https://github.com/docker-library/python/blob/3362634339580d3232e65a66dd5a36c47ae7ff14/3.12/slim-trixie/Dockerfile#L0-L0
+
+
+    ✗ LOW CVE-2010-0928
+      https://scout.docker.com/v/CVE-2010-0928?s=debian&n=openssl&ns=debian&t=deb&osn=debian&osv=13&vr=%3E%3D3.2.1-3
+      Affected range : >=3.2.1-3 
+      Fixed version  : not fixed 
+    
+
+   0C     0H     0M     1L  shadow 1:4.17.4-2
+pkg:deb/debian/shadow@1%3A4.17.4-2?os_distro=trixie&os_name=debian&os_version=13
+
+https://github.com/docker-library/python/blob/3362634339580d3232e65a66dd5a36c47ae7ff14/3.12/slim-trixie/Dockerfile#L0-L0
+
+
+    ✗ LOW CVE-2007-5686
+      https://scout.docker.com/v/CVE-2007-5686?s=debian&n=shadow&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D1%3A4.17.4-2
+      Affected range : <=1:4.17.4-2 
+      Fixed version  : not fixed    
+    
+
+   0C     0H     0M     1L  apt 3.0.3
+pkg:deb/debian/apt@3.0.3?os_distro=trixie&os_name=debian&os_version=13
+
+https://github.com/docker-library/python/blob/3362634339580d3232e65a66dd5a36c47ae7ff14/3.12/slim-trixie/Dockerfile#L0-L0
+
+
+    ✗ LOW CVE-2011-3374
+      https://scout.docker.com/v/CVE-2011-3374?s=debian&n=apt&ns=debian&t=deb&osn=debian&osv=13&vr=%3C%3D3.0.3
+      Affected range : <=3.0.3   
+      Fixed version  : not fixed 
+    
+
+
+27 vulnerabilities found in 11 packages
+  CRITICAL     0  
+  HIGH         0  
+  MEDIUM       3  
+  LOW          23 
+  UNSPECIFIED  1  
+
