@@ -14,7 +14,7 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
-class UserOut(UserBase):
+class UserResponse(UserBase):
     id: UUID
     created_at: datetime
     
