@@ -1,6 +1,6 @@
+from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from fastapi import HTTPException, status
 from app.models.user import User
 from app.core import security
 from app.schemas.token import Token
@@ -11,7 +11,8 @@ class AuthService:
         db: AsyncSession, 
         username_or_email: str, 
         password: str
-    ) -> User:
+    ) -> Optional[User]:
+
         query = select(User).where(
             (User.username == username_or_email) | (User.email == username_or_email)
         )
@@ -28,8 +29,12 @@ class AuthService:
 
     @staticmethod
     def create_token_for_user(user: User) -> Token:
+
         access_token = security.create_access_token(
             subject=user.id,
-            role=user.role
+            role=user.role.value
         )
-        return Token(access_token=access_token, token_type="bearer")
+        return Token(
+            access_token=access_token, 
+            token_type="bearer"
+        )
