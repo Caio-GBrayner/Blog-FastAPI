@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import field_validator
+from pydantic import field_validator, EmailStr
 from typing import Any
 
 class Settings(BaseSettings):
@@ -11,7 +11,9 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
     
-    DATABASE_URL: str 
+    DATABASE_URL: str
+    
+    API_V1_STR: str = "/api/v1" 
 
     @field_validator("DATABASE_URL", mode="before")
     @classmethod
@@ -25,4 +27,8 @@ class Settings(BaseSettings):
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
+    FIRST_SUPERUSER_EMAIL: EmailStr
+    FIRST_SUPERUSER_PASSWORD: str
+    FIRST_SUPERUSER_USERNAME: str
+    
 settings = Settings()
