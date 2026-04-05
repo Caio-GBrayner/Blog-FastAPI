@@ -1,9 +1,10 @@
+from typing import List
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from pydantic import ValidationError 
+from pydantic import ValidationError
 
 from app.core.config import settings
 from app.db.session import get_db
