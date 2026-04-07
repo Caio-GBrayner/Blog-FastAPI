@@ -1,5 +1,5 @@
-from app.schemas.user import UserBase, UserCreate, UserOut
+from app.schemas.user import UserBase, UserCreate, UserResponse
 
 __all__= [
-    "UserBase", "UserCreate", "UserOut"
+    "UserBase", "UserCreate", "UserResponse"
 ]
