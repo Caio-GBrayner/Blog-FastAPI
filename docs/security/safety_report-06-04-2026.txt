@@ -1,0 +1,28 @@
+Safety 3.7.0 scanning /home/caiogbrayner/Desktop/BlogFastAPI
+2026-04-06 18:26:15 UTC
+
+Account: caiogomesbrayner@outlook.com 
+ Git branch: main
+ Environment: Stage.development
+ Scan policy: None, using Safety CLI default policies
+
+Python detected. Found 1 Python requirement file and 1 Python environment
+
+Dependency vulnerabilities detected:
+
+📝 requirements.txt:
+
+ ecdsa==0.19.2 [2 vulnerabilities found]                                                                                                                                                        
+  -> Vuln ID 64459: CVE-2024-23342, CVSS Severity HIGH                                                                                                                                          
+     The python-ecdsa library, which implements ECDSA cryptography in Python, is vulnerable to the Minerva attack (...                                                                          
+  -> Vuln ID 64396:                                                                                                                                                                             
+     Ecdsa does not protects against side-channel attacks. This is because Python does not provide side-channel sec...                                                                          
+ No known fix for ecdsa==0.19.2 to fix 2 vulnerabilities                                                                                                                                        
+ Learn more: https://data.safetycli.com/p/pypi/ecdsa/eda/?from=0.19.2                                                                                                                           
+
+✅ .venv/pyvenv.cfg: No issues found.
+
+Tested 153 dependencies for security issues using default Safety CLI policies
+4 vulnerabilities found, 2 ignored due to policy.
+0 fixes suggested, resolving 0 vulnerabilities.
+
